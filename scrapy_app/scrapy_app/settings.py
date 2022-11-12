@@ -12,6 +12,35 @@ BOT_NAME = 'scrapy_app'
 SPIDER_MODULES = ['scrapy_app.spiders']
 NEWSPIDER_MODULE = 'scrapy_app.spiders'
 
+# Splash Integration
+
+SPLASH_URL = 'http://34.118.20.88:8050'
+
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+}
+
+SPIDER_MIDDLEWARES = {
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
+
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+
+# Django Integration
+
+import os
+import sys 
+sys.path.append(os.path.dirname(os.path.abspath('.')))
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'p7_iCrawler.settings'
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+
+import django
+django.setup()
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'scrapy_app (+http://www.yourdomain.com)'
