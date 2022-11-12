@@ -9,5 +9,5 @@ scrapyd = ScrapydAPI('http://localhost:6800')
 # Create your views here.
 class MainPageView(View):
     def get(self, request):
-        task = scrapyd.schedule('default', 'icrawler')
+        task = scrapyd.schedule('default', 'eve_crawler')
         return HttpResponse(task)
