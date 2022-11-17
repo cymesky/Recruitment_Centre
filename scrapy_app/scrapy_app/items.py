@@ -5,7 +5,7 @@
 
 import scrapy
 from scrapy_djangoitem import DjangoItem
-from website_app.models import PostRecruit, Recruit, Skill
+from website_app.models import PostRecruit, Recruit
 
 
 class ScrapyAppItem(scrapy.Item):
@@ -18,6 +18,3 @@ class PostRecruitItem(DjangoItem):
 
 class RecruitItem(DjangoItem):
     django_model = Recruit
-
-class SkillItem(DjangoItem):
-    django_model = Skill
