@@ -36,8 +36,8 @@ import os
 import sys 
 sys.path.append(os.path.dirname(os.path.abspath('.')))
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'p7_iCrawler.settings'
-os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+os.environ['DJANGO_SETTINGS_MODULE'] = 'Recruitment_Centre.settings'
+# os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 import django
 django.setup()
@@ -92,7 +92,8 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'scrapy_app.pipelines.ScrapyAppPipeline': 300,
+   'scrapy_app.pipelines.PostRecruitPipeline': 300,
+   'scrapy_app.pipelines.RecruitPipeline': 301,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
