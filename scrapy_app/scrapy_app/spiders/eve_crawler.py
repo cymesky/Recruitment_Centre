@@ -1,8 +1,10 @@
 import scrapy
 import json
 from scrapy_splash import SplashRequest
-from scrapy_app.items import PostRecruitItem, RecruitItem
-import scrapy_app.settings as settings
+from scrapy_app.items import PostRecruitItem, RecruitItem, GroupedSkillzItem
+from website_app.models import PostRecruit
+from itemadapter import ItemAdapter
+
 class EveCrawlerSpider(scrapy.Spider):
     name = 'eve_crawler'
 
@@ -15,10 +17,10 @@ class EveCrawlerSpider(scrapy.Spider):
             page_url = url + str(page_number)
 
             yield SplashRequest(page_url, callback=self.parse_page, args={
-                'wait': 2
+                'wait': 1
             })
 
-    
+
     def parse_page(self, response):
         REJECTED_WORDS = ('WTB', 'PRIVATE SALE', 'PRIVATE-SALE',
                           'SOLD', 'CLOSE', 'REMOVE', 'NEW SKILLBOARD')
@@ -72,9 +74,11 @@ class EveCrawlerSpider(scrapy.Spider):
     
     def parse_recruit(self, response):
         post = response.meta.get('post_item')
+        
         recruit = RecruitItem()
 
         data = json.loads(response.css('pre::text').extract_first())
+
 
         # Check is recruit exist #
         name = data.get('character')
@@ -89,6 +93,8 @@ class EveCrawlerSpider(scrapy.Spider):
         # Recruit name was finded then add post to database #
         yield post
 
+
+
         # Check is alliance exist #
         alliance = data.get('character').get('corporation').get('alliance')
 
@@ -96,6 +102,8 @@ class EveCrawlerSpider(scrapy.Spider):
             recruit['alliance'] = alliance.get('name')
         else:
             recruit['alliance'] = ''   
+
+
 
         # Check is avaiable remaps exist #
         available_remaps = data.get('attributes').get('bonus_remaps')
@@ -105,8 +113,9 @@ class EveCrawlerSpider(scrapy.Spider):
         else:
             recruit['available_remaps'] = '0'
 
-        # Parsing implants #
 
+
+        # Parsing implants #
         implants = data.get('implants')
         implant_slot1 = ''
         implant_slot2 = ''
@@ -134,6 +143,8 @@ class EveCrawlerSpider(scrapy.Spider):
         recruit['implant_slot4'] = implant_slot4
         recruit['implant_slot5'] = implant_slot5
 
+
+        # parsing rest recruit elements, always present
         recruit['character_id'] = data['character_id']
         recruit['corporation'] = data['character']['corporation']['name']
         recruit['date_of_birth'] = data['character']['birthday'][:10]
@@ -145,9 +156,22 @@ class EveCrawlerSpider(scrapy.Spider):
         recruit['memory'] = data['attributes']['memory']
         recruit['perception'] = data['attributes']['perception'] 
         recruit['willpower'] = data['attributes']['willpower']
-
         recruit['post_recruit'] = post
 
 
         yield recruit
 
+        grouped_skills = data.get('groupedSkillz')
+
+        if grouped_skills != None:
+            for g in grouped_skills:
+                grouped_skillz = GroupedSkillzItem()
+                grouped_skillz['group_id'] = g.get('group_id')
+                grouped_skillz['group_name'] = g.get('group_name')
+                grouped_skillz['recruit'] = recruit
+
+                yield grouped_skillz
+
+
+
+        

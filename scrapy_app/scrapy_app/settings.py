@@ -37,7 +37,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.abspath('.')))
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'Recruitment_Centre.settings'
-# os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+#os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 import django
 django.setup()
@@ -94,6 +94,8 @@ ROBOTSTXT_OBEY = True
 ITEM_PIPELINES = {
    'scrapy_app.pipelines.PostRecruitPipeline': 300,
    'scrapy_app.pipelines.RecruitPipeline': 301,
+   'scrapy_app.pipelines.GroupedSkillzPipeline': 302,
+#    'scrapy_app.pipelines.SkillPipeline': 303,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

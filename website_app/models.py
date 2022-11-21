@@ -40,3 +40,33 @@ class Recruit(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class GroupedSkillz(models.Model):
+    group_id = models.IntegerField()
+    group_name = models.CharField(max_length=512)
+
+    recruit = models.ForeignKey(Recruit, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.group_name + ' - ' + self.recruit.name
+    
+    
+class Skill(models.Model):
+    skill_id = models.IntegerField(primary_key=True, editable=False)
+    skill_name = models.CharField(max_length=512)
+    skill_rank = models.IntegerField()
+    skill_group_name = models.CharField(max_length=512)
+    skill_active_level = models.IntegerField()
+    skill_points_in_skill = models.IntegerField()
+    skill_trained_level = models.IntegerField()
+
+    grouped_skillz = models.ForeignKey(GroupedSkillz, on_delete=models.CASCADE)
+    recruit = models.ForeignKey(Recruit, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.skill_name
+
+
+
+

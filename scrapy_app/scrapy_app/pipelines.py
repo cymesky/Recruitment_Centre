@@ -6,7 +6,7 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
-from website_app.models import PostRecruit, Recruit
+from website_app.models import PostRecruit, Recruit, GroupedSkillz, Skill
 from asgiref.sync import sync_to_async
 
 class PostRecruitPipeline:
@@ -62,4 +62,22 @@ class RecruitPipeline:
             post_recruit = PostRecruit.objects.get(pk=post['post_id'])
         )
         recruit.save()
+        return item
+
+class GroupedSkillzPipeline:
+    @sync_to_async
+    def process_item(self, item, spider):
+
+        if type(item).__name__ != 'GroupedSkillzItem':
+            return item
+        
+        group_recruit = item.get('recruit')
+
+        grouped_skillz = GroupedSkillz(
+            group_id = item.get('group_id'),
+            group_name = item.get('group_name'),
+            recruit = Recruit.objects.get(pk=group_recruit['character_id'])
+        )
+
+        grouped_skillz.save()
         return item
