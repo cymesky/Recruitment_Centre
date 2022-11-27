@@ -8,19 +8,17 @@ from scrapy_djangoitem import DjangoItem
 from website_app.models import PostRecruit, Recruit, GroupedSkillz, Skill
 
 
-class ScrapyAppItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
-
 class PostRecruitItem(DjangoItem):
     django_model = PostRecruit
+
 
 class RecruitItem(DjangoItem):
     django_model = Recruit
 
+
 class GroupedSkillzItem(DjangoItem):
     django_model = GroupedSkillz
+
 
 class SkillItem(DjangoItem):
     django_model = Skill

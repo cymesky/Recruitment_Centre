@@ -6,3 +6,4 @@ from . import models
 admin.site.register(models.PostRecruit)
 admin.site.register(models.Recruit)
 admin.site.register(models.GroupedSkillz)
+admin.site.register(models.Skill)
