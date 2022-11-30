@@ -60,7 +60,7 @@ class EveCrawlerSpider(scrapy.Spider):
                 self.logger.info(f'Recruit url to delete: {recruit_url}')
                 post_in_db = await PostRecruit.objects.filter(post_toon_url__exact=recruit_url).afirst()
                 if post_in_db is not None:
-                    self.logger.info(f'Delete post: {post_in_db.post_title}')
+                    self.logger.info(f'Delete post: {post_in_db.post_url}')
                     await PostRecruit.objects.filter(post_toon_url__exact=recruit_url).adelete()
                 else:
                     self.logger.warning(f"We can't find recruit with url: {recruit_url}")
