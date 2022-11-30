@@ -39,9 +39,13 @@ class RecruitPipeline:
 
         post = item.get('post_recruit')
 
+        # combine profile image url
+        profile_img_url = f"https://images.evetech.net/characters/{item.get('character_id')}/portrait"
+
         recruit = Recruit(
             name=item.get('name'),
             character_id=item.get('character_id'),
+            profile_img_url=profile_img_url,
             corporation=item.get('corporation'),
             date_of_birth=item.get('date_of_birth'),
             security_status=item.get('security_status'),

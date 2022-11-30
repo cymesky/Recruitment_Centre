@@ -9,7 +9,7 @@ class PostRecruit(models.Model):
     post_created = models.DateField()
     post_last = models.DateField()
     post_url = models.CharField(max_length=512)
-    post_toon_url = models.CharField(max_length=512, blank=True, null=True)
+    post_toon_url = models.URLField()
 
     def __str__(self):
         return self.post_title
@@ -17,7 +17,8 @@ class PostRecruit(models.Model):
 
 class Recruit(models.Model):
     name = models.CharField(max_length=512)
-    character_id = models.IntegerField(primary_key=True, editable=False)
+    character_id = models.IntegerField(primary_key=True)
+    profile_img_url = models.URLField()
     corporation = models.CharField(max_length=512)
     date_of_birth = models.DateField()
     security_status = models.CharField(max_length=512)

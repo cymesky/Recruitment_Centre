@@ -1,9 +1,9 @@
 import json
 
 import scrapy
+from scrapy import signals
 from scrapy_splash import SplashRequest
 from website_app.models import PostRecruit
-
 from ..items import PostRecruitItem, RecruitItem, GroupedSkillzItem, SkillItem
 
 
@@ -13,12 +13,23 @@ class EveCrawlerSpider(scrapy.Spider):
     # load database post_id list
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.posts_ids_in_db = list(x[0] for x in PostRecruit.objects.values_list('post_id'))
+        self.recruits_url_in_db = list(x[0] for x in PostRecruit.objects.values_list('post_toon_url'))
+        self.recruits_url_on_site = []
+        self.recruits_url_to_delete = []
+        self.new_recruits_num = 0
+
+    @classmethod
+    def from_crawler(cls, crawler, *args, **kwargs):
+        spider = super(EveCrawlerSpider, cls).from_crawler(crawler, *args, **kwargs)
+
+        # when the spider will finish the work then clean database of outdated recruits
+        crawler.signals.connect(spider.spider_closed, signal=scrapy.signals.spider_closed)
+        return spider
 
     def start_requests(self):
         url = 'https://forums.eveonline.com/c/marketplace/character-bazaar/60/l/latest.json?ascending=false&page=0'
 
-        number_of_pages = 15
+        number_of_pages = 5
 
         for page_number in range(0, number_of_pages):
             page_url = url + str(page_number)
@@ -26,6 +37,36 @@ class EveCrawlerSpider(scrapy.Spider):
             yield SplashRequest(page_url, callback=self.parse_page, args={
                 'wait': 1
             })
+
+    async def spider_closed(self):
+        # when the spider has finished, we begin to check whether the recruits saved in the database
+        # are still available
+
+        recruits_to_delete = [x for x in self.recruits_url_in_db if x not in self.recruits_url_on_site]
+
+        self.logger.info('#### STATS ####')
+        self.logger.info(f'Numbers of recruits urls in db before scanning: {len(self.recruits_url_in_db)}')
+        self.logger.info(f'Numbers of recruits urls finded on scanned site: {len(self.recruits_url_on_site)}')
+        self.logger.info(f'Numbers of new recruits added to db: {self.new_recruits_num}')
+
+        if len(self.recruits_url_to_delete) > 0:
+            for recruit_url in self.recruits_url_to_delete:
+                recruits_to_delete.append(recruit_url)
+
+        self.logger.info(f'Numbers of unavailable recruits to delete from db: {len(recruits_to_delete)}')
+
+        if len(recruits_to_delete) > 0:
+            for recruit_url in recruits_to_delete:
+                self.logger.info(f'Recruit url to delete: {recruit_url}')
+                post_in_db = await PostRecruit.objects.filter(post_toon_url__exact=recruit_url).afirst()
+                if post_in_db is not None:
+                    self.logger.info(f'Delete post: {post_in_db.post_title}')
+                    await PostRecruit.objects.filter(post_toon_url__exact=recruit_url).adelete()
+                else:
+                    self.logger.warning(f"We can't find recruit with url: {recruit_url}")
+
+        else:
+            self.logger.info('All recruits in db are available')
 
     def parse_page(self, response):
         rejected_words = ('WTB', 'PRIVATE SALE', 'PRIVATE-SALE',
@@ -38,10 +79,6 @@ class EveCrawlerSpider(scrapy.Spider):
         t_range = len(topics)
 
         for i in range(0, t_range):
-
-            # if post exist in database, skipping
-            if topics[i]['id'] in self.posts_ids_in_db:
-                continue
 
             post = PostRecruitItem()
             post['post_id'] = topics[i]['id']
@@ -89,37 +126,39 @@ class EveCrawlerSpider(scrapy.Spider):
 
     def parse_recruit(self, response):
         post = response.meta.get('post_item')
+        url = response.url
 
         recruit = RecruitItem()
 
         data = json.loads(response.css('pre::text').extract_first())
 
-        # Check is recruit exist #
+        # Check is recruit exist
         name = data.get('character')
 
-        # If not break parsing
+        # If not - break parsing, if it's another checking and recruit was available,
+        # but now it's unavailable then should be deleted from db
         if name is None:
+            if url in self.recruits_url_in_db:
+                self.recruits_url_to_delete.append(url)
             return None
 
+        self.recruits_url_on_site.append(url)
+
+        # If post for recruit is in db then, skipping parsing
+        if url in self.recruits_url_in_db:
+            return
+
         recruit['name'] = name.get('name')
-        # Recruit name was found then add post to database #
+        # Recruit name was found then add post to database
         yield post
 
-        # Check is alliance exist #
+        # Check is alliance exist
         alliance = data.get('character').get('corporation').get('alliance')
 
         if alliance is not None:
             recruit['alliance'] = alliance.get('name')
         else:
             recruit['alliance'] = ''
-
-            # Check is available remaps exist #
-        available_remaps = data.get('attributes').get('bonus_remaps')
-
-        if available_remaps is not None:
-            recruit['available_remaps'] = available_remaps
-        else:
-            recruit['available_remaps'] = '0'
 
         # Parsing implants #
         implants = data.get('implants')
@@ -155,19 +194,41 @@ class EveCrawlerSpider(scrapy.Spider):
         else:
             recruit['unallocated_sp'] = 0
 
+        # Check is attributes available
+        attributes = data.get('attributes')
+
+        if attributes is not None:
+
+            # Check is available remaps exist #
+            available_remaps = data.get('attributes').get('bonus_remaps')
+            if available_remaps is not None:
+                recruit['available_remaps'] = available_remaps
+            else:
+                recruit['available_remaps'] = '0'
+
+            recruit['charisma'] = data['attributes']['charisma']
+            recruit['intelligence'] = data['attributes']['intelligence']
+            recruit['memory'] = data['attributes']['memory']
+            recruit['perception'] = data['attributes']['perception']
+            recruit['willpower'] = data['attributes']['willpower']
+        else:
+            recruit['available_remaps'] = 'unavailable'
+            recruit['charisma'] = 'unavailable'
+            recruit['intelligence'] = 'unavailable'
+            recruit['memory'] = 'unavailable'
+            recruit['perception'] = 'unavailable'
+            recruit['willpower'] = 'unavailable'
+
         # parsing always present recruit elements
         recruit['character_id'] = data['character_id']
         recruit['corporation'] = data['character']['corporation']['name']
         recruit['date_of_birth'] = data['character']['birthday'][:10]
         recruit['security_status'] = data['character']['security_status']
         recruit['total_sp'] = data['meta']['total_sp']
-        recruit['charisma'] = data['attributes']['charisma']
-        recruit['intelligence'] = data['attributes']['intelligence']
-        recruit['memory'] = data['attributes']['memory']
-        recruit['perception'] = data['attributes']['perception']
-        recruit['willpower'] = data['attributes']['willpower']
         recruit['post_recruit'] = post
 
+        self.logger.info(f"New recruit found: '{recruit['name']}'")
+        self.new_recruits_num += 1
         # send recruit to RecruitPipeline
         yield recruit
 
