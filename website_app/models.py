@@ -8,7 +8,7 @@ class PostRecruit(models.Model):
     post_replies = models.CharField(max_length=255)
     post_created = models.DateField()
     post_last = models.DateField()
-    post_url = models.CharField(max_length=512)
+    post_url = models.URLField()
     post_toon_url = models.URLField()
 
     def __str__(self):
