@@ -6,6 +6,9 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import django
+import os
+import sys
 
 BOT_NAME = 'scrapy_app'
 
@@ -14,7 +17,10 @@ NEWSPIDER_MODULE = 'scrapy_app.spiders'
 
 # Splash Integration
 
-SPLASH_URL = 'http://34.118.20.88:8050'
+# splash url for local machine: 'http://127.0.0.1:8050'
+# splash url for splash service in docker: 'http://splash:8050'
+
+SPLASH_URL = 'http://splash:8050'
 
 DOWNLOADER_MIDDLEWARES = {
     'scrapy_splash.SplashCookiesMiddleware': 723,
@@ -31,16 +37,11 @@ DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
 
 # Django Integration
-
-import os
-import sys
-
 sys.path.append(os.path.dirname(os.path.abspath('.')))
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'Recruitment_Centre.settings'
-# os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
-import django
+# os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 django.setup()
 
