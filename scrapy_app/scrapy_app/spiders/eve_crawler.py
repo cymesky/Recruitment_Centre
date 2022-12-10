@@ -49,6 +49,9 @@ class EveCrawlerSpider(scrapy.Spider):
         self.logger.info(f'Numbers of recruits urls finded on scanned site: {len(self.recruits_url_on_site)}')
         self.logger.info(f'Numbers of new recruits added to db: {self.new_recruits_num}')
 
+        # for fast debug purpose
+        print(f"Finded {len(self.recruits_url_on_site)} recruits")
+
         if len(self.recruits_url_to_delete) > 0:
             for recruit_url in self.recruits_url_to_delete:
                 recruits_to_delete.append(recruit_url)
@@ -229,6 +232,7 @@ class EveCrawlerSpider(scrapy.Spider):
 
         self.logger.info(f"New recruit found: '{recruit['name']}'")
         self.new_recruits_num += 1
+
         # send recruit to RecruitPipeline
         yield recruit
 
