@@ -8,15 +8,12 @@ django = "*"
 scrapy = "*"
 scrapyd = "*"
 python-scrapyd-api = "*"
-pywin32 = "*"
-scrapy-djangoitem = "*"
 scrapy-splash = "*"
+django-environ = "*"
 django-extensions = "*"
-ipython = "*"
-asgiref = "*"
-apscheduler = "*"
-pipenv = "*"
 psycopg2 = "*"
+apscheduler = "*"
+scrapy-djangoitem = "*"
 
 [dev-packages]
 
