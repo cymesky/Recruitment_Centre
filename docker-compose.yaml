@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    command: ./run.sh
+    volumes:
+      - .:/code
+    env_file:
+      - Recruitment_Centre/.env
+    depends_on:
+      - db
+      - splash
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+  splash:
+    image: scrapinghub/splash
+    ports:
+      - "8050:8050"
+      - "8051:8051"
+      - "5023:5023"
+    volumes:
+      - /splash
+    restart: unless-stopped
+    depends_on:
+      - db
+volumes:
+  postgres_data:
