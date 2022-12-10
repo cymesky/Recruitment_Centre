@@ -193,7 +193,7 @@ class EveCrawlerSpider(scrapy.Spider):
         # parsing unallocated_sp
         unallocated_sp = data.get('meta').get('unallocated_sp')
         if unallocated_sp is not None:
-            recruit['unallocated_sp'] = data['meta']['unallocated_sp']
+            recruit['unallocated_sp'] = unallocated_sp
         else:
             recruit['unallocated_sp'] = 0
 
@@ -209,11 +209,11 @@ class EveCrawlerSpider(scrapy.Spider):
             else:
                 recruit['available_remaps'] = '0'
 
-            recruit['charisma'] = data['attributes']['charisma']
-            recruit['intelligence'] = data['attributes']['intelligence']
-            recruit['memory'] = data['attributes']['memory']
-            recruit['perception'] = data['attributes']['perception']
-            recruit['willpower'] = data['attributes']['willpower']
+            recruit['charisma'] = data.get('attributes').get('charisma')
+            recruit['intelligence'] = data.get('attributes').get('intelligence')
+            recruit['memory'] = data.get('attributes').get('memory')
+            recruit['perception'] = data.get('attributes').get('perception')
+            recruit['willpower'] = data.get('attributes').get('willpower')
         else:
             recruit['available_remaps'] = 'unavailable'
             recruit['charisma'] = 'unavailable'
@@ -223,11 +223,11 @@ class EveCrawlerSpider(scrapy.Spider):
             recruit['willpower'] = 'unavailable'
 
         # parsing always present recruit elements
-        recruit['character_id'] = data['character_id']
-        recruit['corporation'] = data['character']['corporation']['name']
-        recruit['date_of_birth'] = data['character']['birthday'][:10]
-        recruit['security_status'] = data['character']['security_status']
-        recruit['total_sp'] = data['meta']['total_sp']
+        recruit['character_id'] = data.get('character_id')
+        recruit['corporation'] = data.get('character').get('corporation').get('name')
+        recruit['date_of_birth'] = data.get('character').get('birthday')[:10]
+        recruit['security_status'] = data.get('character').get('security_status')
+        recruit['total_sp'] = data.get('meta').get('total_sp')
         recruit['post_recruit'] = post
 
         self.logger.info(f"New recruit found: '{recruit['name']}'")
