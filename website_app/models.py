@@ -38,7 +38,7 @@ class Recruit(models.Model):
     implant_slot4 = models.CharField(max_length=512)
     implant_slot5 = models.CharField(max_length=512)
 
-    post_recruit = models.OneToOneField(PostRecruit, on_delete=models.CASCADE, related_name='post')
+    post_recruit = models.OneToOneField(PostRecruit, on_delete=models.CASCADE, related_name='recruit')
 
     def __str__(self):
         return self.name
@@ -49,7 +49,7 @@ class GroupedSkillz(models.Model):
     group_id = models.IntegerField()
     group_name = models.CharField(max_length=512)
     group_total_sp = models.IntegerField()
-    recruit = models.ForeignKey(Recruit, on_delete=models.CASCADE, related_name='groups')
+    recruit = models.ForeignKey(Recruit, on_delete=models.CASCADE, related_name='groupedskillzs')
 
     def __str__(self):
         return f'{self.group_name} - {self.recruit.name}'
@@ -66,7 +66,7 @@ class Skill(models.Model):
     skill_points_in_skill = models.IntegerField()
     skill_trained_level = models.IntegerField()
 
-    grouped_skillz = models.ForeignKey(GroupedSkillz, on_delete=models.CASCADE, related_name='skill_groups')
+    grouped_skillz = models.ForeignKey(GroupedSkillz, on_delete=models.CASCADE, related_name='skills')
     recruit = models.ForeignKey(Recruit, on_delete=models.CASCADE, related_name='skills')
 
     def __str__(self):
