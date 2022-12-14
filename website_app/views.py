@@ -1,5 +1,5 @@
 from .models import PostRecruit, Recruit, GroupedSkillz, Skill
-from .serialializers import PostRecruitSerializer, RecruitSerializer, \
+from .serializers import PostRecruitSerializer, RecruitSerializer, \
     GroupedSkillzSerializer, SkillSerializer
 from rest_framework import generics
 
