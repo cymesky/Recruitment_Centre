@@ -43,3 +43,33 @@ class SkillListAPIView(generics.ListAPIView):
 class SkillDetailAPIView(generics.RetrieveAPIView):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
+
+
+# API returns all recruits from db that meet the specified conditions
+# skill name = skill level
+# example:
+# /api/Search/Caldari+Battleship=5&Marauders=5&Drones=4
+class SearchBySkillLevelListApiView(generics.ListAPIView):
+    queryset = Recruit.objects.all()
+    serializer_class = RecruitSerializer
+
+    def get_queryset(self):
+        first_query = True
+        recruits_satysfying = []
+
+        skills_to_search = self.request.GET
+        if skills_to_search is not None:
+            for k, v in skills_to_search.items():
+                recruits = Recruit.objects.filter(
+                    skills__skill_name=k, skills__skill_trained_level=v)
+
+                if first_query:
+                    recruits_satysfying = recruits
+                    first_query = False
+                else:
+                    recruits_satysfying = recruits_satysfying & recruits
+
+                if len(recruits_satysfying) == 0:
+                    return Recruit.objects.none()
+
+        return recruits_satysfying
