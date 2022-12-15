@@ -10,10 +10,12 @@ from ..items import PostRecruitItem, RecruitItem, GroupedSkillzItem, SkillItem
 class EveCrawlerSpider(scrapy.Spider):
     name = 'eve_crawler'
 
-    # load database post_id list
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+        # load data from db
         self.recruits_url_in_db = list(x[0] for x in PostRecruit.objects.values_list('post_toon_url'))
+
         self.recruits_url_on_site = []
         self.recruits_url_to_delete = []
         self.new_recruits_num = 0
@@ -27,10 +29,13 @@ class EveCrawlerSpider(scrapy.Spider):
         return spider
 
     def start_requests(self):
+        # Slug for crawling
         url = 'https://forums.eveonline.com/c/marketplace/character-bazaar/60/l/latest.json?ascending=false&page=0'
 
-        number_of_pages = 5
+        # Number of pages for scraping
+        number_of_pages = 10
 
+        # If crawling more than one site then crawler run asynchronous
         for page_number in range(0, number_of_pages):
             page_url = url + str(page_number)
 
