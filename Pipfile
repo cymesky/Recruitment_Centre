@@ -57,6 +57,7 @@ tzlocal = "==4.2"
 urllib3 = "==1.26.13"
 w3lib = "==2.1.0"
 "zope.interface" = "==5.5.2"
+django-cors-headers = "*"
 
 [dev-packages]
 
