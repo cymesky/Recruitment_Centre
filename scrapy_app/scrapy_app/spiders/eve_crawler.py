@@ -262,19 +262,27 @@ class EveCrawlerSpider(scrapy.Spider):
                 number_of_skills = len(skills)
 
                 for s in range(number_of_skills):
-                    # if character_id is not exist then this skill is not injected
-                    if skills[s].get('character_id') is None:
-                        continue
-
                     skill = SkillItem()
-                    skill['skill_id'] = skills[s].get('id')
-                    skill['skill_name'] = skills[s].get('name')
-                    skill['skill_rank'] = skills[s].get('skill_rank')
-                    skill['skill_character_id'] = skills[s].get('character_id')
-                    skill['skill_group_id'] = skills[s].get('group_id')
-                    skill['skill_group_name'] = skills[s].get('group_name')
-                    skill['skill_active_level'] = skills[s].get('active_skill_level')
-                    skill['skill_points_in_skill'] = skills[s].get('skillpoints_in_skill')
-                    skill['skill_trained_level'] = skills[s].get('trained_skill_level')
+                    # if character_id is not exist then still add skill but in lvl 0
+                    if skills[s].get('character_id') is None:
+                        skill['skill_character_id'] = recruit['character_id']
+                        skill['skill_id'] = skills[s].get('id')
+                        skill['skill_name'] = skills[s].get('name')
+                        skill['skill_rank'] = skills[s].get('skill_rank')
+                        skill['skill_group_id'] = skills[s].get('group_id')
+                        skill['skill_group_name'] = skills[s].get('group_name')
+                        skill['skill_active_level'] = 0
+                        skill['skill_points_in_skill'] = 0
+                        skill['skill_trained_level'] = 0
+                    else:
+                        skill['skill_id'] = skills[s].get('id')
+                        skill['skill_name'] = skills[s].get('name')
+                        skill['skill_rank'] = skills[s].get('skill_rank')
+                        skill['skill_character_id'] = skills[s].get('character_id')
+                        skill['skill_group_id'] = skills[s].get('group_id')
+                        skill['skill_group_name'] = skills[s].get('group_name')
+                        skill['skill_active_level'] = skills[s].get('active_skill_level')
+                        skill['skill_points_in_skill'] = skills[s].get('skillpoints_in_skill')
+                        skill['skill_trained_level'] = skills[s].get('trained_skill_level')
 
                     yield skill

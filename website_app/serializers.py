@@ -44,4 +44,7 @@ class RecruitSerializer(serializers.HyperlinkedModelSerializer):
                   'post_recruit', 'groupedskillzs']
 
 
-
+class AllSkillsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Skill
+        fields = ['skill_name']

@@ -1,6 +1,6 @@
 from .models import PostRecruit, Recruit, GroupedSkillz, Skill
 from .serializers import PostRecruitSerializer, RecruitSerializer, \
-    GroupedSkillzSerializer, SkillSerializer
+    GroupedSkillzSerializer, SkillSerializer, AllSkillsSerializer
 from rest_framework import generics
 
 
@@ -73,3 +73,15 @@ class SearchBySkillLevelListApiView(generics.ListAPIView):
                     return Recruit.objects.none()
 
         return recruits_satysfying
+
+
+class AllSkillsListApiView(generics.ListAPIView):
+    queryset = Skill.objects.all()
+    serializer_class = AllSkillsSerializer
+
+    def get_queryset(self):
+        recruit = Recruit.objects.last()
+
+        skills = Skill.objects.filter(recruit=recruit)
+
+        return skills
