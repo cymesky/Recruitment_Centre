@@ -1,3 +1,5 @@
+# compatible with docker 4.13.1 or below
+
 # pull official base image
 FROM python:3
 
