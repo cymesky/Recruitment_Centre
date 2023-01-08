@@ -40,7 +40,7 @@ class EveCrawlerSpider(scrapy.Spider):
             page_url = url + str(page_number)
 
             yield SplashRequest(page_url, callback=self.parse_page, args={
-                'wait': 1
+                'wait': 2
             })
 
     async def spider_closed(self):

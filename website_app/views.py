@@ -52,6 +52,7 @@ class SkillDetailAPIView(generics.RetrieveAPIView):
 class SearchBySkillLevelListApiView(generics.ListAPIView):
     queryset = Recruit.objects.all()
     serializer_class = RecruitSerializer
+    pagination_class = None
 
     def get_queryset(self):
         first_query = True
@@ -61,7 +62,7 @@ class SearchBySkillLevelListApiView(generics.ListAPIView):
         if skills_to_search is not None:
             for k, v in skills_to_search.items():
                 recruits = Recruit.objects.filter(
-                    skills__skill_name=k, skills__skill_trained_level=v)
+                    skills__skill_name=k, skills__skill_trained_level__gte=v)
 
                 if first_query:
                     recruits_satysfying = recruits
@@ -78,6 +79,7 @@ class SearchBySkillLevelListApiView(generics.ListAPIView):
 class AllSkillsListApiView(generics.ListAPIView):
     queryset = Skill.objects.all()
     serializer_class = AllSkillsSerializer
+    pagination_class = None
 
     def get_queryset(self):
         recruit = Recruit.objects.last()
