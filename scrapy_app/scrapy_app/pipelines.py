@@ -63,6 +63,8 @@ class RecruitPipeline:
             implant_slot3=item.get('implant_slot3'),
             implant_slot4=item.get('implant_slot4'),
             implant_slot5=item.get('implant_slot5'),
+            post_toon_url=item.get('post_toon_url'),
+            post_url=item.get('post_url'),
             post_recruit=PostRecruit.objects.get(pk=post['post_id'])
         )
         recruit.save()

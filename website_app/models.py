@@ -38,6 +38,9 @@ class Recruit(models.Model):
     implant_slot4 = models.CharField(max_length=512)
     implant_slot5 = models.CharField(max_length=512)
 
+    post_url = models.URLField()
+    post_toon_url = models.URLField()
+
     post_recruit = models.OneToOneField(PostRecruit, on_delete=models.CASCADE, related_name='recruit')
 
     def __str__(self):

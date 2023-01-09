@@ -41,7 +41,7 @@ class RecruitSerializer(serializers.HyperlinkedModelSerializer):
                   'total_sp', 'available_remaps', 'charisma', 'intelligence',
                   'memory', 'perception', 'willpower', 'implant_slot1',
                   'implant_slot2', 'implant_slot3', 'implant_slot4', 'implant_slot5',
-                  'post_recruit', 'groupedskillzs']
+                  'post_recruit', 'groupedskillzs', 'post_toon_url', 'post_url']
 
 
 class AllSkillsSerializer(serializers.HyperlinkedModelSerializer):

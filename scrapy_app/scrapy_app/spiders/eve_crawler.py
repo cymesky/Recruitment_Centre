@@ -157,6 +157,9 @@ class EveCrawlerSpider(scrapy.Spider):
             return
 
         recruit['name'] = name.get('name')
+
+        recruit['post_toon_url'] = post['post_toon_url']
+        recruit['post_url'] = post['post_url']
         # Recruit name was found then add post to database
         yield post
 
