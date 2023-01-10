@@ -1,0 +1,63 @@
+tbody {
+  display: block;
+  height: 300px;
+  overflow-y: scroll;
+}
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed; /* even columns width , fix width of table too*/
+}
+
+td {
+  table-layout: fixed;
+}
+
+thead {
+  width: calc(
+    100% - 1em
+  ); /* scrollbar is average 1em/16px width, remove it from thead width */
+}
+table {
+  width: 300px;
+  visibility: visible;
+  opacity: 1;
+  transition: all 2s linear;
+}
+
+@media (max-width: 480px) {
+  .tables-row {
+    height: 820px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 979px) {
+  .tables-row {
+    height: 420px;
+  }
+}
+
+.hide {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 2s, opacity 2s linear;
+}
+
+.table-show {
+  visibility: visible;
+  opacity: 1;
+  transition: all 2s linear;
+}
+
+.row-back {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.row-back.change {
+  height: auto;
+  opacity: 1;
+  transition: all 6s;
+}

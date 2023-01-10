@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      src="https://kit.fontawesome.com/b9a437d887.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="assets/css/bootstrap-responsive.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container mt-3">
+      <div class="row header">
+        <div class="col-12 border border-secondary rounded text-center">
+          <h1 class="display-4">Recruitment Centre</h1>
+          <p class="lead">EVE Online Character Bazaar Browser</p>
+          <hr class="my-2" />
+          <p>
+            Find your EVE Online pilot in seconds instead of spending hours on
+            it.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-3">
+      <div class="row p-3 justify-content-center text-center">
+        <div class="col-md-6 border rounded border-success">
+          <p class="">
+            For first select your skill from list above, you can use filter
+            below.
+            <br />
+            Next indicate the skill you are looking for between lvl 1 - 5.
+            <br />
+            Press
+            <span><i class="fa-solid fa-circle-plus"></i></span>
+            button to add it to the list
+          </p>
+        </div>
+      </div>
+
+      <div class="container mt-3">
+        <div class="row justify-content-center">
+          <div class="col-md-4">
+            <div class="input-group p-3">
+              <button class="btn btn-remove mx-2">
+                <i class="fa-sharp fa-solid fa-xmark"></i>
+              </button>
+              <input
+                type="text"
+                class="form-control filter-field"
+                placeholder="Skills filter"
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="input-group p-3">
+              <button class="btn btn-dark px-3 mx-3 add-button">
+                <i class="fa-solid fa-circle-plus"></i>
+              </button>
+              <input
+                type="text"
+                class="form-control lvl-field"
+                placeholder=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container mt-5">
+        <div class="row tables-row">
+          <div class="col-md-6 tables-place1">
+            <p class="lead text-center">Available skills</p>
+            <table class="table border border-black table-all-skills">
+              <thead class="bg-dark text-light text-center">
+                <tr>
+                  <th scope="col">Skill name</th>
+                </tr>
+              </thead>
+              <tbody class="text-center all-skills-body"></tbody>
+            </table>
+          </div>
+
+          <div class="col-md-6 tables-place2">
+            <p class="lead text-center">Sought-after skills</p>
+            <table class="table border border-black table-needed-skills">
+              <thead class="bg-dark text-light text-center">
+                <tr>
+                  <th class="w-50">Skill name</th>
+                  <th class="w-25">Level</th>
+                  <th class="w-25"></th>
+                </tr>
+              </thead>
+              <tbody class="text-center needed-skills-body"></tbody>
+            </table>
+          </div>
+
+          <div class="col-12 d-none table-pilots-place">
+            <p class="lead text-center">Found pilots:</p>
+            <table class="table border border-black table-pilots">
+              <thead class="bg-dark text-light text-center">
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Skillpoints</th>
+                  <th scope="col">Post</th>
+                  <th scope="col">Profile</th>
+                </tr>
+              </thead>
+              <tbody class="text-center table-pilots-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-3">
+      <div class="row justify-content-center row-find">
+        <div class="col-12 text-center">
+          <button class="btn btn-warning btn-find-pilot">Find pilot</button>
+        </div>
+      </div>
+
+      <div class="row justify-content-center row-back">
+        <div class="col-12 text-center">
+          <button class="btn btn-danger btn-back">Back to browser</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-5 py-3">
+      <div class="row footer">
+        <div class="col-12 text-center">
+          Copyright © 2023 KrawczykMarcin@live.com
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>
