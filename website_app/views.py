@@ -2,9 +2,16 @@ from .models import PostRecruit, Recruit, GroupedSkillz, Skill
 from .serializers import PostRecruitSerializer, RecruitSerializer, \
     GroupedSkillzSerializer, SkillSerializer, AllSkillsSerializer
 from rest_framework import generics
+from django.views.generic import TemplateView
 
 
-# Create your views here.
+# WEBPAGE
+
+class IndexTemplateView(TemplateView):
+    template_name = 'website_app/index.html'
+
+
+# API
 class PostRecruitListAPIView(generics.ListAPIView):
     queryset = PostRecruit.objects.all()
     serializer_class = PostRecruitSerializer

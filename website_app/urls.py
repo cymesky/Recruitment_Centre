@@ -2,9 +2,10 @@ from django.urls import path
 from .views import PostRecruitListAPIView, PostRecruitDetailAPIView, \
     RecruitListAPIView, RecruitDetailAPIView, GroupedSkillzListAPIView, \
     GroupedSkillzDetailAPIView, SkillListAPIView, SkillDetailAPIView, SearchBySkillLevelListApiView, \
-    AllSkillsListApiView
+    AllSkillsListApiView, IndexTemplateView
 
 urlpatterns = [
+    path('', IndexTemplateView.as_view(), name='index'),
     path('PostRecruits/', PostRecruitListAPIView.as_view(), name='postrecruit-list'),
     path('PostRecruit/<int:pk>/', PostRecruitDetailAPIView.as_view(), name='postrecruit-detail'),
     path('Recruits/', RecruitListAPIView.as_view(), name='recruit-list'),
