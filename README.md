@@ -38,5 +38,24 @@ Run:
 ```sh
 docker-compose up --build
 ```
+
+----------------------------------------------------------------------
+Known problems:
+----------------------------------------------------------------------
+"./run.sh now such file or directory"
+
+It should use Unix-style line endings instead of Windows. 
+This problem occurs for me as well on Windows 10.
+You should run the following command before cloning the repository:
+git config --global core.autocrlf false
+Then clone the repository and proceed
+----------------------------------------------------------------------
+Available skills table is empty
+
+First run application required about 7-10 minutes to first update database.
+Give it time to update itself and refresh browser.
+----------------------------------------------------------------------
+
+
 More info:
 Application is a debug mode for now
