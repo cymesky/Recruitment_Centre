@@ -22,7 +22,7 @@ Application share own api:
 It also has a built-in pilot search engine on default server adress 127.0.0.1:8000
 
 ## Requirements: 
-- Docker 4.13.1 or below - probably are some problems with newer versions
+- Tested on Docker Desktop 4.13.1 and below - probably are some problems with newer versions
 - .env file in Recruitment_Centre folder
 
   example .env file:
@@ -56,6 +56,9 @@ docker-compose up --build
 
   First run application required about 7-10 minutes to first update database.
   Give it time to update itself and refresh browser.
-
-## More info:
-  Application is a debug mode for now
+  
+- {"error": 502, "type": "RenderError", "description": "Error rendering page", "info": {"type": "Network", "code": 6, "text": "SSL handshake failed", "url": "..."}}
+  
+  Problem appears for me on Docker Desktop 4.14 and above, versions 4.13.1 and below working properly
+  https://github.com/scrapinghub/splash/issues/1172
+  
