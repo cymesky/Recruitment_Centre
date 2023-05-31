@@ -22,7 +22,6 @@ Application share own api:
 It also has a built-in pilot search engine on default server adress 127.0.0.1:8000
 
 ## Requirements: 
-- Tested on Docker Desktop 4.13.1 and below - probably are some problems with newer versions
 - .env file in Recruitment_Centre folder
 
   example .env file:
